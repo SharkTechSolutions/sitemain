@@ -7,7 +7,16 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: "*", // allow all origins for testing, or set your local frontend origin
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests explicitly
+app.options('*', cors(corsOptions));
 
 // Nodemailer transporter (Zoho India)
 const transporter = nodemailer.createTransport({
@@ -58,3 +67,4 @@ app.post('/contact', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
