@@ -7,27 +7,16 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-const corsOptions = {
-  origin: "*",
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-};
+app.use(cors());
 
-app.use(cors(corsOptions));
-app.use(express.json());
-
-// Nodemailer transporter (Zoho India)
 const transporter = nodemailer.createTransport({
-  host: "smtp.zoho.in",
-  port: 587,
-  secure: false,
+  service: 'gmail',
   auth: {
-    user: process.env.ZOHO_EMAIL,
-    pass: process.env.ZOHO_APP_PASS
+    user: process.env.GMAIL_EMAIL,
+    pass: process.env.GMAIL_APP_PASS
   }
 });
 
-// Contact form endpoint
 app.post('/contact', async (req, res) => {
   const { name, email, phone, service, message } = req.body;
 
@@ -39,8 +28,8 @@ app.post('/contact', async (req, res) => {
   console.log("Message:", message);
 
   const mailOptions = {
-    from: process.env.ZOHO_EMAIL,
-    to: process.env.ZOHO_RECEIVER_EMAIL,
+    from: process.env.GMAIL_EMAIL,
+    to: process.env.GMAIL_RECEIVER_EMAIL, // where you want to receive messages
     subject: `New Contact Form Submission from ${name}`,
     html: `
       <h3>New Contact Request</h3>
@@ -54,7 +43,6 @@ app.post('/contact', async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    // ✅ Only send response once
     return res.status(200).json({ success: true, message: "Message sent successfully!" });
   } catch (err) {
     console.error("Error sending email:", err);
@@ -65,5 +53,3 @@ app.post('/contact', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
