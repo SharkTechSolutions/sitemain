@@ -11,13 +11,14 @@ app.use(cors());
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // 465 = SSL required
+  port: 587,
+  secure: false, // 587 = STARTTLS
   auth: {
     user: process.env.GMAIL_EMAIL,
     pass: process.env.GMAIL_APP_PASS
   }
 });
+
 
 app.post('/contact', async (req, res) => {
   const { name, email, phone, service, message } = req.body;
@@ -102,6 +103,7 @@ app.listen(PORT, () => {
 // app.listen(PORT, () => {
 //   console.log(`Server running on port ${PORT}`);
 // });
+
 
 
 
