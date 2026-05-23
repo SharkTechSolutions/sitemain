@@ -30,6 +30,8 @@ app.post('/contact', async (req, res) => {
       process.env.GMAIL_RECEIVER_EMAIL,
       process.env.SENDGRID_TO_EMAIL
     ].filter(Boolean);
+
+    console.log("Receivers:", receivers);
     
     const data = await resend.emails.send({
       from: "Portfolio <onboarding@resend.dev>", // FROM — Resend default domain
@@ -45,7 +47,7 @@ app.post('/contact', async (req, res) => {
         <p><strong>Message:</strong><br>${message}</p>
       `
     });
-
+    console.log("RESEND RESPONSE:", data);
     return res.status(200).json({ success: true, message: "Message sent successfully!", id: data.id });
 
   } catch (err) {
