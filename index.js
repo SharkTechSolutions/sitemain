@@ -35,7 +35,7 @@ app.post('/contact', async (req, res) => {
     
     const data = await resend.emails.send({
       from: "Portfolio <onboarding@resend.dev>", // FROM — Resend default domain
-      to: receivers,      // Mail receiver (tumhara email)
+      to: process.env.GMAIL_RECEIVER_EMAIL,      // Mail receiver (tumhara email)
       reply_to: email,                           // Reply click → user ko reply jayega
       subject: `New Contact Form Submission from ${name}`,
       html: `
